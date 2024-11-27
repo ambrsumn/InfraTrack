@@ -5,6 +5,10 @@ backend/node_modules/
 frontend/node_modules/
 frontend/build/
 
+# Angular
+frontend-angular/node_modules/
+frontend-angular/build/
+
 # Logs
 logs
 *.log
