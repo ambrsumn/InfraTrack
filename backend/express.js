@@ -2,6 +2,7 @@ const express = require('express');
 
 //ROUTES IMPORTS
 const companyRoute = require('./routes/companyRoute');
+const userRoute = require('./routes/userRoute');
 
 
 const app = express();
@@ -17,6 +18,7 @@ app.get('/', (req, res) => {
 })
 
 app.use('/common/company', companyRoute);
+app.use('/authentication/user', userRoute);
 
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
