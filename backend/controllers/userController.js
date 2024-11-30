@@ -7,9 +7,9 @@ require('dotenv').config();
 const userSignUp = async (req, res) => {
     try {
         console.log(req.body);
-        let { name, userRole, password, mobileNumber } = req.body;
+        let { name, userRole, password, mobileNumber, companyId } = req.body;
 
-        if (!name || !userRole || !password || !mobileNumber) {
+        if (!name || !userRole || !password || !mobileNumber || !companyId) {
             return res.status(400).json({
                 message: "All fields are required",
                 success: false,
@@ -44,10 +44,10 @@ const userSignUp = async (req, res) => {
         }
         const insertQuery = `
             INSERT INTO employeeTable 
-            (employeeName, userRoleId, userPassword, userMobileNumber) 
-            VALUES (?, ?, ?, ?)`;
+            (employeeName, userRoleId, userPassword, userMobileNumber, companyId) 
+            VALUES (?, ?, ?, ?, ?)`;
         const result = await new Promise((resolve, reject) => {
-            db.query(insertQuery, [name, userRole, hashedPassword, mobileNumber], (err, result) => {
+            db.query(insertQuery, [name, userRole, hashedPassword, mobileNumber, companyId], (err, result) => {
                 if (err) reject(err);
                 else resolve(result);
             });
@@ -112,7 +112,8 @@ const userLogin = async (req, res) => {
                     token: token,
                     userName: selectedUser[0].employeeName,
                     userRole: selectedUser[0].userRoleId,
-                    userMobileNumber: selectedUser[0].userMobileNumber
+                    userId: selectedUser[0].id,
+                    companyId: selectedUser[0].companyId
                 });
             }
         }
