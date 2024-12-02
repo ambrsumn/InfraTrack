@@ -51,7 +51,7 @@ app.get('/', (req, res) => {
 
 app.use('/common/company', companyRoute);
 app.use('/authentication/user', userRoute);
-// app.use('/orders', productRoute)
+app.use('/orders', productRoute)
 
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);

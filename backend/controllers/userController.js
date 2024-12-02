@@ -104,7 +104,7 @@ const userLogin = async (req, res) => {
                 });
             }
             else {
-                const token = jwt.sign({ userId: selectedUser[0].employeeName, userMobileNumber: selectedUser[0].userMobileNumber }, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRES_IN });
+                const token = jwt.sign({ userId: selectedUser[0].employeeName, userRoleId: selectedUser[0].userRoleId }, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRES_IN });
 
                 return res.status(200).json({
                     message: "Login Successful",
