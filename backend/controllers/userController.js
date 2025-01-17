@@ -104,16 +104,18 @@ const userLogin = async (req, res) => {
                 });
             }
             else {
-                const token = jwt.sign({ userId: selectedUser[0].employeeName, userRoleId: selectedUser[0].userRoleId }, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRES_IN });
+                const token = jwt.sign({ userId: selectedUser[0].id, userRoleId: selectedUser[0].userRoleId }, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRES_IN });
 
                 return res.status(200).json({
                     message: "Login Successful",
                     success: true,
-                    token: token,
-                    userName: selectedUser[0].employeeName,
-                    userRole: selectedUser[0].userRoleId,
-                    userId: selectedUser[0].id,
-                    companyId: selectedUser[0].companyId
+                    data: {
+                        token: token,
+                        userName: selectedUser[0].employeeName,
+                        userRole: selectedUser[0].userRoleId,
+                        userId: selectedUser[0].id,
+                        companyId: selectedUser[0].companyId
+                    }
                 });
             }
         }

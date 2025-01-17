@@ -1,7 +1,6 @@
 const db = require('../database/db');
 
 getAllCompanies = (req, res) => {
-    // console.log(req.query.id);
     let query = '';
     let params = [];
 
