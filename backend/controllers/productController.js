@@ -5,7 +5,7 @@ const getOrders = async (req, res) => {
     console.log(req.body.user);
     // console.log(req.user);
     try {
-        let query = `SELECT * FROM orderTable`;
+        let query = `SELECT * FROM ordertable`;
         let orders = await new Promise((resolve, reject) => {
             db.query(query, (err, result) => {
                 if (err) {
@@ -48,10 +48,10 @@ const getOrders = async (req, res) => {
 const postOrder = async (req, res) => {
     console.log(req.body.user);
     try {
-        let query = `INSERT INTO orderTable (product_name, product_quantity, ordered_by, ordered_on, status) VALUES  (?, ?, ?, ?, ?)`
+        let query = `INSERT INTO ordertable (product_name, product_quantity, ordered_by, ordered_on, status) VALUES  (?, ?, ?, ?, ?)`
         let currentDate = new Date();
 
-        let selectQuery = `SELECT * FROM orderTable`;
+        let selectQuery = `SELECT * FROM ordertable`;
 
         const postedOrders = await new Promise((resolve, reject) => {
             db.query(selectQuery, (err, result) => {
@@ -121,8 +121,8 @@ const updateOrderStatus = async (req, res) => {
     try {
         let orderId = req.body.orderId;
         let newStatus = req.body.status;
-        let updateQuery = `UPDATE orderTable SET status = ? WHERE id = ?`;
-        let selectQuery = `SELECT * FROM orderTable`;
+        let updateQuery = `UPDATE ordertable SET status = ? WHERE id = ?`;
+        let selectQuery = `SELECT * FROM ordertable`;
 
         const allOrders = await new Promise((resolve, reject) => {
             db.query(selectQuery, (err, result) => {

@@ -17,7 +17,7 @@ const userSignUp = async (req, res) => {
         }
         const hashedPassword = await bcrypt.hash(password, 10);
 
-        const allUsersQuery = 'SELECT * FROM employeeTable';
+        const allUsersQuery = 'SELECT * FROM employeetable';
         const existingUsers = await new Promise((resolve, reject) => {
             db.query(allUsersQuery, (err, result) => {
                 if (err) reject(err);
@@ -43,7 +43,7 @@ const userSignUp = async (req, res) => {
             });
         }
         const insertQuery = `
-            INSERT INTO employeeTable 
+            INSERT INTO employeetable 
             (employeeName, userRoleId, userPassword, userMobileNumber, companyId) 
             VALUES (?, ?, ?, ?, ?)`;
         const result = await new Promise((resolve, reject) => {
@@ -79,7 +79,7 @@ const userLogin = async (req, res) => {
             });
         }
 
-        let query = `SELECT * FROM employeeTable WHERE userMobileNumber = ?`;
+        let query = `SELECT * FROM employeetable WHERE userMobileNumber = ?`;
 
         const selectedUser = await new Promise((resolve, reject) => {
             db.query(query, [mobileNumber], (err, result) => {

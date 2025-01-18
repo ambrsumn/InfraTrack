@@ -5,11 +5,11 @@ getAllCompanies = (req, res) => {
     let params = [];
 
     if (req?.query?.id || req?.query?.companyName) {
-        query = `SELECT * FROM companyTable WHERE id = ? OR companyName LIKE ?`;
+        query = `SELECT * FROM companytable WHERE id = ? OR companyName LIKE ?`;
         params.push(req.query.id || null);
         params.push(req.query.companyName ? `%${req.query.companyName}%` : null);
     } else {
-        query = `SELECT * FROM companyTable`;
+        query = `SELECT * FROM companytable`;
     }
 
     console.log(query);
@@ -48,7 +48,7 @@ postNewCompany = (req, res) => {
             success: "false"
         })
     }
-    query = `INSERT INTO companyTable (companyName) VALUES (?)`;
+    query = `INSERT INTO companytable (companyName) VALUES (?)`;
     params.push(companyName);
 
     db.query(query, params, (err, result) => {

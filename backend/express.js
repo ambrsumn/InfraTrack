@@ -1,4 +1,5 @@
 const express = require('express');
+const cors = require('cors');
 const swaggerJsdoc = require('swagger-jsdoc');
 const swaggerUi = require('swagger-ui-express');
 
@@ -10,6 +11,7 @@ const productRoute = require('./routes/productRoute');
 
 const app = express();
 const port = process.env.PORT || 8080;
+app.use(cors());
 
 const swaggerDefinition = {
     openapi: '3.0.0',
@@ -41,6 +43,12 @@ const swaggerSpec = swaggerJsdoc(options);
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 app.use(express.json());
+
+app.use(
+    cors({
+        origin: 'http://localhost:3000',
+    })
+)
 
 app.get('/', (req, res) => {
     res.status(202).send({
