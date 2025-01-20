@@ -46,9 +46,12 @@ app.use(express.json());
 
 app.use(
     cors({
-        origin: 'http://localhost:3000',
+        origin: [
+            'http://localhost:3000', // For local development
+            'https://infra-track-frontend.vercel.app' // For production frontend
+        ],
     })
-)
+);
 
 app.get('/', (req, res) => {
     res.status(202).send({

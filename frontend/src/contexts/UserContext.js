@@ -4,7 +4,7 @@ const UserContext = createContext();
 
 export const UserProvider = ({ children }) => {
     const [token, setToken] = useState(null);
-    const [apiHost, setApiHost] = useState('http://localhost:8080/');
+    const [apiHost, setApiHost] = useState('https://infra-track-backend.vercel.app/');
 
     const saveToken = (token) => {
         setToken(token);
