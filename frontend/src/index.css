@@ -15,3 +15,12 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.gradient-primary-button {
+    background: linear-gradient(155deg, #95CCE8 10%, #73B6E6 27%, #5E7FE2 49%, #8262C9 67%);
+    border-radius: 20px !important;
+    color: white;
+    transition: 0.5s;
+    background-size: 200% auto;
+}
+

@@ -4,18 +4,24 @@ import Home from './components/Home';
 import Navbar from './components/Navbar';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { UserProvider } from './contexts/UserContext';
+import Orders from './components/Orders';
+import ApprovalPage from './components/ApprovalPage';
 
 function App() {
   return (
     <UserProvider>
       <>
-        <Navbar />
+
         <BrowserRouter>
+          <Navbar />
           <Routes>
             <Route path="/" element={<Home />} />
+            <Route path="/orders" element={<Orders />} />
+            <Route path="/approvals" element={<ApprovalPage />} />
           </Routes>
+          <Footer />
         </BrowserRouter>
-        <Footer />
+
       </>
     </UserProvider>
   );

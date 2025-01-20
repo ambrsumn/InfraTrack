@@ -4,16 +4,21 @@ import { useUser } from '../contexts/UserContext';
 import { Dialog, DialogTitle, DialogContent, DialogActions, Button } from "@mui/material";
 import LoginModal from './LoginModal';
 import SignUpModal from './SignUpModal';
+import { Link, useNavigate } from 'react-router-dom';
+// import { useNavigate } from 'react-router-dom';
 
 const Navbar = () => {
+    const { token, saveToken } = useUser();
     const [user, setUser] = useState();
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [openLogin, setOpenLogin] = useState(false);
     const [openSignup, setOpenSignup] = useState(false);
+    const navigate = useNavigate();
 
     useEffect(() => {
         console.log("YES");
-        let userDetails = localStorage.getItem("user");
+        let userDetails = localStorage.getItem("userData");
+        console.log(token);
         if (userDetails) {
             let userDetailsParsed = JSON.parse(userDetails);
             setUser(userDetailsParsed);
@@ -42,6 +47,17 @@ const Navbar = () => {
         setOpenLogin(true);
     };
 
+    const handleOrdersClick = () => {
+        navigate("/orders"); // Navigate to /orders
+    };
+
+    const logOut = () => {
+        localStorage.removeItem("userData");
+        setIsLoggedIn(false);
+        saveToken(null);
+        navigate("/");
+    }
+
 
     return (
         <>
@@ -51,8 +67,8 @@ const Navbar = () => {
                 </div>
 
                 <div className="flex flex-row gap-x-6 pt-2 pr-8  font-semibold">
-                    {isLoggedIn && <button className="text-white" >Orders</button>}
-                    {isLoggedIn && <button className="text-white" >Logout</button>}
+                    {isLoggedIn && <button className="text-white" onClick={handleOrdersClick}>Orders</button>}
+                    {isLoggedIn && <button className="text-white" onClick={logOut}>Logout</button>}
                     {!isLoggedIn && <button className="text-white" onClick={handleOpenLogin} >Login</button>}
                     {!isLoggedIn && <button className="text-white" onClick={handleOpenSignUp} >Signup</button>}
 

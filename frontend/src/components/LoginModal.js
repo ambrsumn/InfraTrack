@@ -2,10 +2,19 @@ import react from 'react'
 import { useState, useEffect } from 'react';
 import { useUser } from '../contexts/UserContext';
 import { TextField, Button } from '@mui/material';
+import axios from 'axios';
+import { Dialog, DialogContent } from '@mui/material';
+import ProcessingDialog from './ProcessingDialog';
+import Snackbar from '@mui/material/Snackbar';
 
 const LoginModal = ({ handleClose }) => {
+
+    const { apiHost, saveToken, token } = useUser();
     const [mobileNumber, setMobileNumber] = useState();
     const [password, setPassword] = useState('');
+    const [openProcessingDialog, setOpenProcessingDialog] = useState(false);
+    const [openSnackbar, setOpenSnackbar] = useState(false);
+    const [snackBarMessage, setSnackBarMessage] = useState('');
 
     const [mobileError, setMobileError] = useState('');
 
@@ -20,11 +29,61 @@ const LoginModal = ({ handleClose }) => {
             setMobileError("");
             setMobileNumber(mobileNumber2);
         }
-    }
+    };
 
-    const login = () => {
+    const login = async () => {
         console.log(mobileNumber);
         console.log(password);
+
+        let url = `${apiHost}authentication/user/login`;
+        console.log(url);
+
+        let data = {
+            "mobileNumber": mobileNumber,
+            "password": password
+        }
+
+        console.log(data);
+
+        setOpenProcessingDialog(true);
+        console.log(url);
+
+        setTimeout(() => {
+            setOpenProcessingDialog(false);
+        }, 2000);
+
+        try {
+            const res = await axios.post(url, data).then((res) => {
+                console.log(res.data.data);
+                let receivedData = res.data.data;
+
+                saveToken(receivedData.token)
+
+                let dataToSave = {
+                    "userId": receivedData.userId,
+                    "userRole": receivedData.userRole,
+                    "companyId": receivedData.companyId,
+                    "userName": receivedData.userName,
+                    "token": receivedData.token
+                }
+
+                localStorage.setItem('userData', JSON.stringify(dataToSave));
+                console.log(token);
+                setSnackBarMessage("Login Successful!");
+                setOpenSnackbar(true);
+                setTimeout(() => {
+                    handleClose();
+                }, 3000);
+            }).then((err) => {
+                console.log(err);
+
+            })
+        }
+        catch (error) {
+            console.log(error);
+            setSnackBarMessage(error.response.data.message);
+            setOpenSnackbar(true);
+        }
     }
 
 
@@ -49,6 +108,20 @@ const LoginModal = ({ handleClose }) => {
                     <button className="font-medium text-lg border border-black px-4 py-1  bg-blue-200 rounded-lg shadow-lg" onClick={handleClose}>Close</button>
                 </div>
             </div>
+
+            <Dialog open={openProcessingDialog}>
+                <DialogContent>
+                    <ProcessingDialog />
+                </DialogContent>
+
+            </Dialog>
+
+            <Snackbar
+                // anchorOrigin={{ vertical, horizontal }}
+                open={openSnackbar}
+                autoHideDuration={5000}
+                message={snackBarMessage}
+            />
         </>
     )
 }

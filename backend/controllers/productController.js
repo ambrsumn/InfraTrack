@@ -2,12 +2,19 @@ const express = require('express');
 const db = require('../database/db');
 
 const getOrders = async (req, res) => {
-    console.log(req.body.user);
-    // console.log(req.user);
+    // console.log(req.body.user);
+    let userId = +req.query.userId;
+    console.log("user id is : ", userId);
+
     try {
-        let query = `SELECT * FROM ordertable`;
+        let query = `SELECT * FROM ordertable where ordered_by = ?`;
+        if (userId === 0) {
+            console.log("get all data");
+            query = `select ot.product_name, ot.product_quantity, ot.ordered_on, ot.status, et.employeeName from ordertable ot inner join employeetable et where ot.ordered_by = et.id;`;
+        }
+        console.log(query);
         let orders = await new Promise((resolve, reject) => {
-            db.query(query, (err, result) => {
+            db.query(query, [userId], (err, result) => {
                 if (err) {
                     reject(err);
                 }

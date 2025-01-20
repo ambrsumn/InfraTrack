@@ -36,3 +36,38 @@
     transform: rotate(360deg);
   }
 }
+
+.gradient-primary-button {
+    background: linear-gradient(155deg, #95CCE8 10%, #73B6E6 27%, #5E7FE2 49%, #8262C9 67%);
+    border-radius: 20px !important;
+    color: white;
+    transition: 0.5s;
+    background-size: 200% auto;
+    
+}
+.gradient-primary-button:hover {
+    background-position: right center; /* change the direction of the change here */
+    color: #fff;
+    text-decoration: none;
+}
+
+
+.gradient-primary-button:disabled {
+    background: lightgray;
+    cursor: not-allowed;
+    border-radius: 20px!important;
+}
+
+.white-button-primary {
+    color: #1e3a8a;
+    background-color: #fff;
+    border-radius: 20px!important;
+    box-shadow: 2px 3px 4px rgba(0, 0, 0, 0.1);
+}
+
+.white-button-primary:hover {
+    background-color: #f4f4f4;
+    color: #1e3a8a;
+    text-decoration: none;
+}
+
