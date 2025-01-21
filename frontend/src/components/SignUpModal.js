@@ -22,6 +22,7 @@ const SignUpModal = ({ handleClose }) => {
     const [strongPasswordError, setStrongPasswordError] = useState('');
     const [openProcessingDialog, setOpenProcessingDialog] = useState(false);
     const [openSnackbar, setOpenSnackbar] = useState(false);
+    const [snackbarMessage, setSnackbarMessage] = useState('');
 
     const [passwordError, setPasswordError] = useState('');
     const [mobileError, setMobileError] = useState('');
@@ -106,9 +107,9 @@ const SignUpModal = ({ handleClose }) => {
         let url = `${apiHost}authentication/user/signup`;
         console.log(url);
 
-        setTimeout(() => {
-            setOpenProcessingDialog(false);
-        }, 2000);
+        // setTimeout(() => {
+
+        // }, 2000);
 
 
 
@@ -123,10 +124,12 @@ const SignUpModal = ({ handleClose }) => {
         try {
             const res = await axios.post(url, data).then((res) => {
                 console.log(res);
+                setSnackbarMessage(`${res.data.message}, this pop-up will close in 2 seconds`);
                 setOpenSnackbar(true);
+                setOpenProcessingDialog(false);
                 setTimeout(() => {
                     handleClose();
-                }, 3000);
+                }, 2000);
 
 
             }).catch((err) => {
@@ -137,6 +140,13 @@ const SignUpModal = ({ handleClose }) => {
         }
         catch (err) {
             console.log(err);
+            setSnackbarMessage(`${err.response.data.message}, this pop-up will close in 2 seconds`);
+            setOpenProcessingDialog(false);
+
+            setOpenSnackbar(true);
+            setTimeout(() => {
+                handleClose();
+            }, 2000);
         }
 
         // console.log(data);
@@ -225,7 +235,7 @@ const SignUpModal = ({ handleClose }) => {
                 // anchorOrigin={{ vertical, horizontal }}
                 open={openSnackbar}
                 autoHideDuration={5000}
-                message="Account created sucessfully, please login."
+                message={snackbarMessage}
             />
         </>
     )

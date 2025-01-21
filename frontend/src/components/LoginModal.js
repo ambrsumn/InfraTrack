@@ -69,11 +69,11 @@ const LoginModal = ({ handleClose }) => {
 
                 localStorage.setItem('userData', JSON.stringify(dataToSave));
                 console.log(token);
-                setSnackBarMessage("Login Successful!");
+                setSnackBarMessage(`${res.data.message}, this pop-up will close in 2 seconds`);
                 setOpenSnackbar(true);
                 setTimeout(() => {
                     handleClose();
-                }, 3000);
+                }, 2000);
             }).then((err) => {
                 console.log(err);
 
@@ -81,7 +81,10 @@ const LoginModal = ({ handleClose }) => {
         }
         catch (error) {
             console.log(error);
-            setSnackBarMessage(error.response.data.message);
+            setSnackBarMessage(`${error.response.data.message}, this pop-up will close in 2 seconds`);
+            setTimeout(() => {
+                handleClose();
+            }, 2000);
             setOpenSnackbar(true);
         }
     }
