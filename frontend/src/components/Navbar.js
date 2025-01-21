@@ -51,6 +51,10 @@ const Navbar = () => {
         navigate("/orders"); // Navigate to /orders
     };
 
+    const handleLogoClick = () => {
+        navigate("/"); // Navigate to /orders
+    };
+
     const logOut = () => {
         localStorage.removeItem("userData");
         setIsLoggedIn(false);
@@ -62,7 +66,7 @@ const Navbar = () => {
     return (
         <>
             <div id="main" className="h-[10vh] bg-black flex flex-row justify-between">
-                <div className="">
+                <div onClick={handleLogoClick} className="">
                     <img src="https://i.imgur.com/obHWspi.jpeg" className="h-full w-[5rem]" alt="Logo" />
                 </div>
 
