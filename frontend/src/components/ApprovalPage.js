@@ -20,6 +20,7 @@ const ApprovalPage = () => {
         // console.log(token);
         let user = localStorage.getItem('userData');
         if (user) {
+            setDataLoading(true);
             console.log(user);
             let userDataa = JSON.parse(user);
             console.log(userDataa);
