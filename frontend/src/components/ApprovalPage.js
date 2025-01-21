@@ -46,7 +46,34 @@ const ApprovalPage = () => {
         }
 
 
-    }, []);
+    }, [dataLoading]);
+
+    const changeOrderStatus = async (orderId, statusName) => {
+        let url = `${apiHost}orders/updateOrderStatus`;
+        let data = {
+            orderId: +orderId,
+            status: statusName.toString()
+        }
+
+        console.log(data);
+
+        setDataLoading(true);
+
+        try {
+            axios.put(url, data, {
+                headers: {
+                    'Authorization': `Bearer ${userData.token}`,
+                }
+            }).then((res) => {
+                console.log(res);
+                setDataLoading(false);
+            })
+        }
+        catch (err) {
+            console.log(err);
+            setDataLoading(false);
+        }
+    }
 
     const filterData = (name) => {
         let searchedName = name.toString();
@@ -93,12 +120,15 @@ const ApprovalPage = () => {
                                             <td className="px-2 py-3 whitespace-nowrap text-xs">{order.product_name}</td>
                                             <td className="px-2 py-3 whitespace-nowrap text-xs">{order.product_quantity}</td>
                                             {/* <td className="px-2 pl-4 py-3 whitespace-nowrap text-xs">{new Date(order.ordered_on).toLocaleDateString('en-GB')}</td>  */}
-                                            {order.status !== 'Order Placed' && <td className="px-2 pl-4 py-3 whitespace-nowrap text-xs">{order.status}</td>}
+                                            {order.status !== 'Order Placed' &&
+                                                <div className="flex flex-row  pl-8 justify-center sm:justify-center mr-6">
+                                                    <button className="non-button-primary px-2 mt-2">{order.status}</button>
+                                                </div>}
                                             {
                                                 order.status === 'Order Placed' &&
                                                 <div className="flex flex-row gap-x-4 justify-end sm:justify-center mr-6">
-                                                    <button className="gradient-primary-button px-2 mt-2">Approve</button>
-                                                    <button className="white-button-primary px-2 mt-2">Hold</button>
+                                                    <button onClick={() => { changeOrderStatus(order.id, 'Approved') }} className="gradient-primary-button px-2 mt-2">Approve</button>
+                                                    <button onClick={() => { changeOrderStatus(order.id, 'Hold') }} className="white-button-primary px-2 mt-2">Hold</button>
                                                 </div>
                                             }
                                         </tr>

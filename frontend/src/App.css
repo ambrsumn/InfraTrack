@@ -65,6 +65,14 @@
     box-shadow: 2px 3px 4px rgba(0, 0, 0, 0.1);
 }
 
+.non-button-primary {
+  width: 6rem;
+    color: #1e3a8a;
+    background-color:bisque;
+    border-radius: 20px!important;
+    box-shadow: 2px 3px 4px rgba(0, 0, 0, 0.1);
+}
+
 .white-button-primary:hover {
     background-color: #f4f4f4;
     color: #1e3a8a;

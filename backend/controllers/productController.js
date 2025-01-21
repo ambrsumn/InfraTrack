@@ -10,7 +10,7 @@ const getOrders = async (req, res) => {
         let query = `SELECT * FROM ordertable where ordered_by = ?`;
         if (userId === 0) {
             console.log("get all data");
-            query = `select ot.product_name, ot.product_quantity, ot.ordered_on, ot.status, et.employeeName from ordertable ot inner join employeetable et where ot.ordered_by = et.id;`;
+            query = `select ot.id, ot.product_name, ot.product_quantity, ot.ordered_on, ot.status, et.employeeName from ordertable ot inner join employeetable et where ot.ordered_by = et.id order by ordered_on desc;`;
         }
         console.log(query);
         let orders = await new Promise((resolve, reject) => {
