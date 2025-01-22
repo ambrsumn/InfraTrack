@@ -47,7 +47,7 @@ const OrderStatusChangePage = () => {
                 setDataLoading(false);
             })
         }
-    }, []);
+    }, [openChangeStatusDialog]);
 
     const changeOrderStatus = async (orderId, statusName) => {
         let url = `${apiHost}orders/updateOrderStatus`;
@@ -106,7 +106,7 @@ const OrderStatusChangePage = () => {
 
                 <div>
                     <div className="overflow-x-auto">
-                        <p className="text-lg text-center text-blue-500 font-semibold mb-4 mt-6">Following orders have been approved by organization head, update their status as required.</p>
+                        <p className="text-lg text-center text-blue-500 font-semibold mb-4 mt-6">Following orders have been approved by organization head, view and process them as required.</p>
 
                         <div className="flex flex-row justify-center gap-x-6 mb-4">
                             <input type="text" placeholder="Type here to search by Name" className="border border-black rounded-md px-3 ml-2 py-2 w-[90%]  bg-slate-300 text-black" onChange={(e) => filterData(e.target.value)} />
@@ -133,8 +133,13 @@ const OrderStatusChangePage = () => {
                                         </tr>
 
                                         <tr>
-                                            <td colSpan="4" className=' pb-12'>
+                                            <td colSpan="4" className=' pb-3'>
                                                 <p className="px-2 py-1 text-xs text-gray-500">Order Placed by - <span className="uppercase text-xs text-black font-medium">{order.employeeName}</span> on <span className="uppercase text-xs text-black font-medium">{new Date(order.ordered_on).toLocaleDateString('en-GB')}</span></p>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td colSpan="4" className=' pb-12'>
+                                                <p className="px-2 py-1 text-xs text-gray-500">Current Status - <span className={`uppercase text-xs font-medium ${order.status === 'Order Received' ? 'text-green-500' : order.status === 'Order Placed' ? 'text-blue-400' : order.status === 'Approved' ? 'text-blue-400' : order.status === 'Pending' ? 'text-black' : 'text-red-500'}`}>{order.status}</span></p>
                                             </td>
                                         </tr>
                                     </>

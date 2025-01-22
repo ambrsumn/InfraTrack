@@ -51,7 +51,7 @@ const ApprovalPage = () => {
         }
 
 
-    }, [dataLoading, openApprovalModal]);
+    }, [openApprovalModal]);
 
     const changeOrderStatus = async (orderId, statusName) => {
         let url = `${apiHost}orders/updateOrderStatus`;
@@ -166,8 +166,13 @@ const ApprovalPage = () => {
                                         </tr>
 
                                         <tr>
-                                            <td colSpan="4" className=' pb-12'>
+                                            <td colSpan="4" className=' pb-2'>
                                                 <p className="px-2 py-1 text-xs text-gray-500">Order Placed by - <span className="uppercase text-xs text-black font-medium">{order.employeeName}</span> on <span className="uppercase text-xs text-black font-medium">{new Date(order.ordered_on).toLocaleDateString('en-GB')}</span></p>
+                                            </td>
+                                        </tr>
+                                        <tr className=' border-transparent'>
+                                            <td colSpan="4" className=' pb-12'>
+                                                <p className="px-2 py-1 text-xs text-gray-500">Current Status - <span className={`uppercase text-xs font-medium ${order.status === 'Order Received' ? 'text-green-500' : order.status === 'Order Placed' ? 'text-blue-400' : order.status === 'Approved' ? 'text-blue-400' : order.status === 'Pending' ? 'text-black' : 'text-red-500'}`}>{order.status}</span></p>
                                             </td>
                                         </tr>
                                     </>

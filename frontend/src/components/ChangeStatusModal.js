@@ -10,7 +10,7 @@ const ChangeStatusModal = ({ handleClose, orderDetails }) => {
     const [dataLoading, setDataLoading] = useState(false);
     const { apiHost } = useUser();
     const [orderStatus, setOrderStatus] = useState();
-    const [comments, setComments] = useState();
+    const [comments, setComments] = useState('');
     const [openSnackbar, setOpenSnackbar] = useState(false);
     const [snackBarMessage, setSnackBarMessage] = useState();
 
@@ -20,10 +20,16 @@ const ChangeStatusModal = ({ handleClose, orderDetails }) => {
             let userData = JSON.parse(user);
             let url = `${apiHost}orders/updateOrderStatus`;
 
+            let managementComment = '';
+            if (orderDetails?.management_comment !== null) {
+                managementComment = orderDetails?.management_comment.toString();
+            }
+
             let data = {
                 orderId: +orderDetails.id,
                 status: orderStatus.toString(),
-                storeComment: comments.toString()
+                storeComment: comments.toString(),
+                managementComment: managementComment
             }
 
             console.log(data);

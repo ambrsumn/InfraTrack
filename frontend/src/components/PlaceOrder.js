@@ -14,7 +14,7 @@ const PlaceOrder = ({ handleClose }) => {
     const [processingModal, setProcessingModal] = useState(false);
     const [openSnackbar, setOpenSnackbar] = useState(false);
     const [snackBarMessage, setSnackBarMessage] = useState('');
-    const [details, setDetails] = useState();
+    const [details, setDetails] = useState('');
 
     const handleName = (enteredName) => {
         let name2 = enteredName.toString();

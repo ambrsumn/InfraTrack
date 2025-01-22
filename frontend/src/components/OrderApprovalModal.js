@@ -11,7 +11,7 @@ const OrderApprovalModal = ({ handleClose, orderDetails }) => {
     const [dataLoading, setDataLoading] = useState(false);
     const { apiHost } = useUser();
     const [orderStatus, setOrderStatus] = useState();
-    const [comments, setComments] = useState();
+    const [comments, setComments] = useState('');
     const [openSnackbar, setOpenSnackbar] = useState(false);
     const [snackBarMessage, setSnackBarMessage] = useState();
 
@@ -88,20 +88,25 @@ const OrderApprovalModal = ({ handleClose, orderDetails }) => {
                     <p className="text-base text-left mt-2"> <span className=' text-red-500'>*</span> Management Comments - <span className="font-semibold">{orderDetails.comments}</span></p>
 
                 </div>
-                <select onChange={(e) => { setOrderStatus(e.target.value) }} name="status" className="border border-black rounded-lg w-full h-[5vh] mt-6 font-medium">
-                    <option value="">Select Action (click to select)</option>
-                    <option value="Approved">Approve</option>
-                    <option value="Hold">Hold</option>
-                    <option value="Reject">Reject</option>
-                </select>
 
-                <div className=' mt-4'>
-                    <label htmlFor="comments" className=' text-black font-semibold '>Add Comment (optional)</label>
-                    <textarea onChange={(e) => { setComments(e.target.value) }} name="comment" className=' px-2 py-1 border border-black rounded-lg shadow-md h-24 mt-2 w-full' placeholder='example : Order is placed and is expected after 1 week'></textarea>
-                </div>
+                {orderDetails.status === 'Pending' &&
+                    <div>
+                        <select onChange={(e) => { setOrderStatus(e.target.value) }} name="status" className="border border-black rounded-lg w-full h-[5vh] mt-6 font-medium">
+                            <option value="">Select Action (click to select)</option>
+                            <option value="Approved">Approve</option>
+                            <option value="Hold">Hold</option>
+                            <option value="Reject">Reject</option>
+                        </select>
+
+                        <div className=' mt-4'>
+                            <label htmlFor="comments" className=' text-black font-semibold '>Add Comment (optional)</label>
+                            <textarea onChange={(e) => { setComments(e.target.value) }} name="comment" className=' px-2 py-1 border border-black rounded-lg shadow-md h-24 mt-2 w-full' placeholder='example : Order is placed and is expected after 1 week'></textarea>
+                        </div>
+                    </div>
+                }
 
                 <div className=' flex flex-row justify-between mt-3'>
-                    <button onClick={updateOrderStatus} className='gradient-primary-button px-3 py-1'>Update Order</button>
+                    {orderDetails.status === 'Pending' && <button onClick={updateOrderStatus} className='gradient-primary-button px-3 py-1'>Update Order</button>}
                     <button onClick={handleClose} className='non-button-primary px-3 py-1'>Close</button>
                 </div>
             </div>

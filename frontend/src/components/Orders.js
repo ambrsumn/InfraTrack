@@ -70,7 +70,7 @@ const Orders = () => {
         }
 
 
-    }, [openPlaceOrder, dataLoading])
+    }, [openPlaceOrder])
 
     const openPlaceOrderModal = () => {
         setOpenPlaceOrder(true);
@@ -124,14 +124,22 @@ const Orders = () => {
                             </thead>
                             <tbody className="bg-white divide-y divide-gray-200">
                                 {orders.map((order, index) => (
-                                    <tr key={index}>
-                                        <td className="px-2 py-3 whitespace-nowrap text-xs">{order.product_name}</td>
-                                        <td className="px-2 py-3 whitespace-nowrap text-xs">{order.product_quantity}</td>
-                                        <td className="px-2 pl-4 py-3 whitespace-nowrap text-xs">{new Date(order.ordered_on).toLocaleDateString('en-GB')}</td>
+                                    <>
+                                        <tr key={index}>
+                                            <td className="px-2 py-3 whitespace-nowrap text-xs">{order.product_name}</td>
+                                            <td className="px-2 py-3 whitespace-nowrap text-xs">{order.product_quantity}</td>
+                                            <td className="px-2 pl-4 py-3 whitespace-nowrap text-xs">{new Date(order.ordered_on).toLocaleDateString('en-GB')}</td>
 
-                                        <td><button onClick={() => { handleOpen(order) }} className='gradient-primary-button px-3 py-1'>View</button></td>
+                                            <td><button onClick={() => { handleOpen(order) }} className='gradient-primary-button px-3 py-1'>View</button></td>
 
-                                    </tr>
+                                        </tr>
+
+                                        <tr>
+                                            <td colSpan="4" className=' pb-12'>
+                                                <p className="px-2 py-1 text-xs text-gray-500">Current Status - <span className={`uppercase text-xs font-medium ${order.status === 'Order Received' ? 'text-green-500' : order.status === 'Order Placed' ? 'text-blue-400' : order.status === 'Approved' ? 'text-blue-400' : order.status === 'Pending' ? 'text-black' : 'text-red-500'}`}>{order.status}</span></p>
+                                            </td>
+                                        </tr>
+                                    </>
                                 ))}
 
 
