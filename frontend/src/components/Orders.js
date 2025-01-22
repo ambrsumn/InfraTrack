@@ -5,6 +5,7 @@ import { Dialog, DialogTitle, DialogContent } from '@mui/material';
 import ProcessingDialog from './ProcessingDialog';
 import PlaceOrder from './PlaceOrder';
 import { useNavigate } from 'react-router-dom';
+import ViewOrderDetails from './ViewOrderDetails';
 
 const Orders = () => {
 
@@ -15,6 +16,9 @@ const Orders = () => {
     const [dataLoading, setDataLoading] = useState(true);
     const [openPlaceOrder, setOpenPlaceOrder] = useState(false);
     const [canApprove, setCanApprove] = useState(false);
+    const [canChangeStatus, setCanChangeStatus] = useState(false);
+    const [openOrderDetails, setOpenOrderDetails] = useState(false);
+    const [selectedOrder, setSelectedOrder] = useState();
 
     const navigate = useNavigate();
 
@@ -25,13 +29,18 @@ const Orders = () => {
         // console.log(token);
         let user = localStorage.getItem('userData');
         if (user) {
+            setDataLoading(true);
             console.log(user);
             let userDataa = JSON.parse(user);
             console.log(userDataa);
             setUserData(userDataa);
 
-            if (userDataa.userRole === 4 || userDataa.userRole === 2 || userDataa.userRole === 6) {
+            if (userDataa.userRole === 5 || userDataa.userRole === 2 || userDataa.userRole === 6) {
                 setCanApprove(true);
+            }
+
+            if (userDataa.userRole === 4) {
+                setCanChangeStatus(true);
             }
             // else {
             //     setUserId(userDataa.userId);
@@ -61,12 +70,22 @@ const Orders = () => {
         }
 
 
-    }, [openPlaceOrder])
+    }, [openPlaceOrder, dataLoading])
 
     const openPlaceOrderModal = () => {
         setOpenPlaceOrder(true);
         console.log(openPlaceOrder);
     }
+
+    const handleOpen = (order) => {
+        console.log(order);
+        setSelectedOrder(order);
+        setOpenOrderDetails(true);
+    };
+
+    const handleClose = () => {
+        setOpenOrderDetails(false);
+    };
 
     const closePlaceOrderModal = () => {
         setOpenPlaceOrder(false);
@@ -75,14 +94,18 @@ const Orders = () => {
     const navigateToApproval = () => {
         navigate('/approvals');
     }
+    const navigateToProcessingPage = () => {
+        navigate('/proocess-orders');
+    }
 
     return (
         <>
             <div className="h-[83vh]" style={{ backgroundImage: 'url(https://i.imgur.com/Q2obufb.jpeg)', backgroundSize: 'cover', backgroundPosition: 'center', }}>
 
-                <div className="flex flex-row justify-between px-10 py-8">
-                    <button className="gradient-primary-button text-base py-2 px-3 font-medium" onClick={openPlaceOrderModal}>Place new Order</button>
-                    {canApprove && <button className="gradient-primary-button text-base py-2 px-3 font-medium" onClick={navigateToApproval} >Approve Orders</button>}
+                <div className="flex flex-row justify-between px-4 py-8">
+                    <button className="gradient-primary-button text-sm py-2 px-3 font-medium" onClick={openPlaceOrderModal}>Place new Order</button>
+                    {canApprove && <button className="gradient-primary-button text-sm py-2 px-3 font-medium" onClick={navigateToApproval} >View Pending approvals</button>}
+                    {canChangeStatus && <button className="gradient-primary-button text-base py-2 px-3 font-medium" onClick={navigateToProcessingPage} >See Orders</button>}
 
                 </div>
 
@@ -104,7 +127,9 @@ const Orders = () => {
                                     <tr key={index}>
                                         <td className="px-2 py-3 whitespace-nowrap text-xs">{order.product_name}</td>
                                         <td className="px-2 py-3 whitespace-nowrap text-xs">{order.product_quantity}</td>
-                                        <td className="px-2 pl-4 py-3 whitespace-nowrap text-xs">{new Date(order.ordered_on).toLocaleDateString('en-GB')}</td>                                    <td className="px-2 pl-4 py-3 whitespace-nowrap text-xs">{order.status}</td>
+                                        <td className="px-2 pl-4 py-3 whitespace-nowrap text-xs">{new Date(order.ordered_on).toLocaleDateString('en-GB')}</td>
+
+                                        <td><button onClick={() => { handleOpen(order) }} className='gradient-primary-button px-3 py-1'>View</button></td>
 
                                     </tr>
                                 ))}
@@ -127,6 +152,12 @@ const Orders = () => {
             <Dialog open={openPlaceOrder} aria-labelledby="ale" aria-describedby="ale">
                 <DialogContent>
                     <PlaceOrder handleClose={closePlaceOrderModal} />
+                </DialogContent>
+            </Dialog>
+
+            <Dialog open={openOrderDetails} aria-labelledby="alert-dialog-title" aria-describedby="alert-dialog-description">
+                <DialogContent>
+                    <ViewOrderDetails handleClose={handleClose} orderDetails={selectedOrder} />
                 </DialogContent>
             </Dialog>
         </>

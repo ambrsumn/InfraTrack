@@ -10,7 +10,12 @@ const getOrders = async (req, res) => {
         let query = `SELECT * FROM ordertable where ordered_by = ?`;
         if (userId === 0) {
             console.log("get all data");
-            query = `select ot.id, ot.product_name, ot.product_quantity, ot.ordered_on, ot.status, et.employeeName from ordertable ot inner join employeetable et where ot.ordered_by = et.id order by ordered_on desc;`;
+            query = `select ot.id, ot.product_name, ot.product_quantity, ot.ordered_on, ot.details, ot.comments, ot.management_comment, ot.status, et.employeeName from ordertable ot inner join employeetable et where ot.ordered_by = et.id order by ordered_on desc;`;
+        }
+
+        if (userId === 9) {
+            console.log("get all data");
+            query = `select ot.id, ot.product_name, ot.product_quantity, ot.status, ot.details, ot.management_comment, comments, ot.ordered_on, et.employeeName from ordertable ot inner join employeetable et where ot.ordered_by = et.id and ot.status != 'Pending' order by ot.ordered_on desc; `;
         }
         console.log(query);
         let orders = await new Promise((resolve, reject) => {
@@ -55,7 +60,7 @@ const getOrders = async (req, res) => {
 const postOrder = async (req, res) => {
     console.log(req.body.user);
     try {
-        let query = `INSERT INTO ordertable (product_name, product_quantity, ordered_by, ordered_on, status) VALUES  (?, ?, ?, ?, ?)`
+        let query = `INSERT INTO ordertable (product_name, product_quantity, ordered_by, ordered_on, status, details) VALUES  (?, ?, ?, ?, ?, ?)`
         let currentDate = new Date();
 
         let selectQuery = `SELECT * FROM ordertable`;
@@ -88,7 +93,7 @@ const postOrder = async (req, res) => {
         }
 
         let postedOrder = await new Promise((resolve, reject) => {
-            db.query(query, [req.body.productName, req.body.productQuantity, req.body.user.userId, currentDate, 'Order Placed'], (err, result) => {
+            db.query(query, [req.body.productName, req.body.productQuantity, req.body.user.userId, currentDate, 'Pending', req.body.details], (err, result) => {
                 if (err) {
                     reject(err);
                 }
@@ -128,7 +133,9 @@ const updateOrderStatus = async (req, res) => {
     try {
         let orderId = req.body.orderId;
         let newStatus = req.body.status;
-        let updateQuery = `UPDATE ordertable SET status = ? WHERE id = ?`;
+        let storeComment = req.body.storeComment;
+        let managementComment = req.body.managementComment;
+        let updateQuery = `UPDATE ordertable SET status = ?, management_comment = ?, comments = ?  WHERE id = ?`;
         let selectQuery = `SELECT * FROM ordertable`;
 
         const allOrders = await new Promise((resolve, reject) => {
@@ -157,7 +164,7 @@ const updateOrderStatus = async (req, res) => {
         }
 
         let updatedOrders = await new Promise((resolve, reject) => {
-            db.query(updateQuery, [newStatus, orderId], (err, result) => {
+            db.query(updateQuery, [newStatus, managementComment, storeComment, orderId], (err, result) => {
                 if (err) {
                     reject(err);
                 }

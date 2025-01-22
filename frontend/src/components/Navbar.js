@@ -74,7 +74,7 @@ const Navbar = () => {
                     {isLoggedIn && <button className="text-white" onClick={handleOrdersClick}>Orders</button>}
                     {isLoggedIn && <button className="text-white" onClick={logOut}>Logout</button>}
                     {!isLoggedIn && <button className="text-white" onClick={handleOpenLogin} >Login</button>}
-                    {!isLoggedIn && <button className="text-white" onClick={handleOpenSignUp} >Signup</button>}
+                    {!isLoggedIn && <button className="text-white" onClick={handleOpenSignUp} >Join</button>}
 
                 </div>
 

@@ -14,6 +14,7 @@ const PlaceOrder = ({ handleClose }) => {
     const [processingModal, setProcessingModal] = useState(false);
     const [openSnackbar, setOpenSnackbar] = useState(false);
     const [snackBarMessage, setSnackBarMessage] = useState('');
+    const [details, setDetails] = useState();
 
     const handleName = (enteredName) => {
         let name2 = enteredName.toString();
@@ -44,6 +45,7 @@ const PlaceOrder = ({ handleClose }) => {
         let data = {
             productName: productName,
             productQuantity: productQuantity,
+            details: details.toString()
         }
 
         let user = localStorage.getItem('userData');
@@ -93,6 +95,11 @@ const PlaceOrder = ({ handleClose }) => {
                     <label className="font-semibold" htmlFor="mobile">Product Quantity <span className="text-red-600">*</span></label>
                     <input placeholder='Enter Quantity with unit' type="text" className="border-2 px-2 border-black w-[100%] h-[5vh] rounded-md shadow-md" onChange={(e) => { handleQuantity(e.target.value) }} />
                     {quantityError !== '' && <p className="text-red-600">{quantityError}</p>}
+                </div>
+
+                <div className=' mt-4'>
+                    <label htmlFor="comments" className=' text-black font-semibold '>Add Details (optional)</label>
+                    <textarea onChange={(e) => { setDetails(e.target.value) }} name="comment" className=' px-2 py-1 border border-black rounded-lg shadow-md h-24 mt-2 w-full' placeholder='need it urgently for SH-56'></textarea>
                 </div>
 
                 <div className="flex flex-row justify-between">

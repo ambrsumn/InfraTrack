@@ -6,6 +6,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { UserProvider } from './contexts/UserContext';
 import Orders from './components/Orders';
 import ApprovalPage from './components/ApprovalPage';
+import OrderStatusChangePage from './components/OrderStatusChangePage';
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/orders" element={<Orders />} />
             <Route path="/approvals" element={<ApprovalPage />} />
+            <Route path='/proocess-orders' element={<OrderStatusChangePage />} />
           </Routes>
           <Footer />
         </BrowserRouter>

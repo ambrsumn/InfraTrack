@@ -3,25 +3,21 @@ import { useUser } from '../contexts/UserContext';
 import axios from 'axios';
 import { Dialog, DialogContent } from "@mui/material";
 import ProcessingDialog from './ProcessingDialog';
-import OrderApprovalModal from './OrderApprovalModal';
+import ChangeStatusModal from './ChangeStatusModal';
 
-const ApprovalPage = () => {
+
+const OrderStatusChangePage = () => {
 
     const { token, apiHost } = useUser();
     const [userData, setUserData] = useState();
     const [userId, setUserId] = useState();
     const [orders, setOrders] = useState([]);
     const [dataLoading, setDataLoading] = useState(true);
-    const [canApprove, setCanApprove] = useState(false);
     const [filteredOrders, setFilteredOrders] = useState([]);
-    const [openApprovalModal, setOpenApprovalModal] = useState(false);
+    const [openChangeStatusDialog, setOpenChangeStatusDialog] = useState(false);
     const [selectedOrder, setSelectedOrder] = useState();
-    const [pendingFilter, setPendingFilter] = useState(true);
-
-
 
     useEffect(() => {
-        // console.log(token);
         let user = localStorage.getItem('userData');
         if (user) {
             setDataLoading(true);
@@ -30,9 +26,11 @@ const ApprovalPage = () => {
             console.log(userDataa);
             setUserData(userDataa);
 
-            let url = `${apiHost}orders/getOrders?userId=0`;
+            // console.log(selectedUserRole);
+
+            let url = `${apiHost}orders/getOrders?userId=9`;
             console.log(url);
-            // console.log(userId);
+            console.log(userId);
             axios.get(url, {
                 headers: {
                     'Authorization': `Bearer ${userDataa.token}`,
@@ -49,9 +47,7 @@ const ApprovalPage = () => {
                 setDataLoading(false);
             })
         }
-
-
-    }, [dataLoading, openApprovalModal]);
+    }, []);
 
     const changeOrderStatus = async (orderId, statusName) => {
         let url = `${apiHost}orders/updateOrderStatus`;
@@ -80,16 +76,6 @@ const ApprovalPage = () => {
         }
     }
 
-    const handleClose = () => {
-        setOpenApprovalModal(false);
-    }
-    const handleOpen = (order) => {
-        console.log(order);
-        setSelectedOrder(order);
-        setOpenApprovalModal(true);
-
-    }
-
     const filterData = (name) => {
         let searchedName = name.toString();
         setFilteredOrders(orders);
@@ -106,24 +92,12 @@ const ApprovalPage = () => {
         setFilteredOrders(filtered);
     }
 
-    const handleCheckbox = (value) => {
-        setPendingFilter(!pendingFilter);
-        console.log(pendingFilter);
-
-        if (pendingFilter) {
-            let totalOrders = orders;
-
-            let filtered = totalOrders.filter((order) => {
-                if (order.status.toLowerCase() === 'pending') {
-                    return order;
-                }
-            });
-
-            setFilteredOrders(filtered);
-        }
-        else {
-            setFilteredOrders(orders);
-        }
+    const openChangeStatusModal = (order) => {
+        setSelectedOrder(order);
+        setOpenChangeStatusDialog(true);
+    }
+    const closeChangeStatusModal = () => {
+        setOpenChangeStatusDialog(false);
     }
 
     return (
@@ -132,25 +106,20 @@ const ApprovalPage = () => {
 
                 <div>
                     <div className="overflow-x-auto">
-                        <p className="text-lg text-center text-blue-500 font-semibold mb-4 mt-6">Approve the orders as required..</p>
+                        <p className="text-lg text-center text-blue-500 font-semibold mb-4 mt-6">Following orders have been approved by organization head, update their status as required.</p>
 
-                        <div className="flex flex-row justify-start gap-x-6 mb-4">
+                        <div className="flex flex-row justify-center gap-x-6 mb-4">
                             <input type="text" placeholder="Type here to search by Name" className="border border-black rounded-md px-3 ml-2 py-2 w-[90%]  bg-slate-300 text-black" onChange={(e) => filterData(e.target.value)} />
-
 
                             {/* <button className="gradient-primary-button px-5 text-lg mt-2 mb-2 py-1">Filter</button> */}
                         </div>
-                        <div>
-                            <label className=' text-base mr-4 font-medium pl-3' htmlFor="checkbox">View Pending Approvals</label>
-                            <input onClick={(e) => { handleCheckbox(e.target.value) }} type="checkbox" id="checkbox" className="checkbox tex-lg" />
-                        </div>
 
-                        <table className="w-[95%] mx-auto bg-white rounded-lg shadow-lg mt-6">
+                        <table className="w-[95%] mx-auto bg-white rounded-lg shadow-lg">
                             <thead className="bg-gray-100">
                                 <tr>
                                     <th className="px-2 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Product</th>
                                     <th className=" py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Qty</th>
-                                    <th className="px-2 py-2 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Action</th>
+                                    <th className="px-2 py-2 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
                                 </tr>
                             </thead>
                             <tbody className="bg-white divide-y divide-gray-200">
@@ -158,10 +127,8 @@ const ApprovalPage = () => {
                                     <>
                                         <tr key={index}>
                                             <td className="px-2 py-3 whitespace-nowrap text-xs">{order.product_name}</td>
-                                            <td className=" py-3 whitespace-nowrap text-xs">{order.product_quantity}</td>
-                                            <td className="px-2 py-3 whitespace-nowrap text-center text-xs">
-                                                <button onClick={() => { handleOpen(order) }} className='gradient-primary-button px-3 py-1'>View</button>
-                                            </td>
+                                            <td className="px-2 py-3 whitespace-nowrap text-xs">{order.product_quantity}</td>
+                                            <td className="text-center"><button onClick={() => openChangeStatusModal(order)} className="gradient-primary-button px-4">Change Status</button></td>
 
                                         </tr>
 
@@ -177,6 +144,7 @@ const ApprovalPage = () => {
                             </tbody>
                             {orders.length === 0 && <p className="text-center mt-2 mb-2 font-semibold text-gray-500">No orders placed yet.</p>}
                         </table>
+                        {filteredOrders.length === 0 && <p className="pl-4 py-2 text-black font-semibold">No new orders available !</p>}
                     </div>
                 </div>
 
@@ -188,13 +156,13 @@ const ApprovalPage = () => {
                 </DialogContent>
             </Dialog>
 
-            <Dialog open={openApprovalModal} aria-labelledby="alert-dialog-title" aria-describedby="alert-dialog-description">
+            <Dialog open={openChangeStatusDialog} aria-labelledby="alert-dialog-title" aria-describedby="alert-dialog-description">
                 <DialogContent>
-                    <OrderApprovalModal orderDetails={selectedOrder} handleClose={handleClose} />
+                    <ChangeStatusModal handleClose={closeChangeStatusModal} orderDetails={selectedOrder} />
                 </DialogContent>
             </Dialog>
         </>
     )
 }
 
-export default ApprovalPage;
+export default OrderStatusChangePage;
