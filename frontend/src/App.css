@@ -79,3 +79,89 @@
     text-decoration: none;
 }
 
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 30px;
+  height: 17px;
+  top: 0.5rem;
+}
+
+/* Hide default HTML checkbox */
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+/* The slider */
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: white;
+  border-radius: 18px;
+  -webkit-transition: .4s;
+  transition: .04s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 10px;
+  width: 10px;
+  left: 4px;
+  bottom: 4px;
+  background-color: #0D47A1;
+  border-radius: 50%;
+  -webkit-transition: .4s;
+  transition: .04s;
+}
+
+.slider:hover {
+  transform: scale(1.15); 
+}
+
+input:checked + .slider {
+  background-color: #98A2B3;
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 1px #98A2B3;
+}
+
+input:checked + .slider:before {
+  -webkit-transform: translateX(13px);
+  -ms-transform: translateX(13px);
+  transform: translateX(13px);
+}
+
+.btn {
+  background: linear-gradient(to right, #c2c2c2, #e7e7e7, #c2c2c2);
+  background-size: 300% 100%; /* Make the gradient wider than the button */
+  animation: gradient-flow 3s linear infinite; /* Apply animation */
+  color: white; /* Button text color */
+  border: none;
+  padding: 10px 20px;
+  font-size: 16px;
+  border-radius: 5px;
+  cursor: pointer;
+  text-align: center;
+  transition: transform 0.2s ease;
+}
+
+@keyframes gradient-flow {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+

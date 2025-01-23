@@ -16,7 +16,7 @@ const ApprovalPage = () => {
     const [filteredOrders, setFilteredOrders] = useState([]);
     const [openApprovalModal, setOpenApprovalModal] = useState(false);
     const [selectedOrder, setSelectedOrder] = useState();
-    const [pendingFilter, setPendingFilter] = useState(true);
+    const [pendingFilter, setPendingFilter] = useState(false);
 
 
 
@@ -140,10 +140,21 @@ const ApprovalPage = () => {
 
                             {/* <button className="gradient-primary-button px-5 text-lg mt-2 mb-2 py-1">Filter</button> */}
                         </div>
-                        <div>
+
+                        <div class="btn rounded-lg px-4 pb-2 w-[80%] mr-auto ml-3">
+                            <div class="mt-1 flex justify-between">
+                                <h2 className="text-base text-[#2B2068] font-medium sm:text-lg mr-4">View Pending approvals</h2>
+                                <label class="switch">
+                                    <input type="checkbox" onClick={(e) => { handleCheckbox(e.target.value) }} checked={!pendingFilter} />
+                                    <span className="slider round"></span>
+                                </label>
+                            </div>
+
+                        </div>
+                        {/* <div>
                             <label className=' text-base mr-4 font-medium pl-3' htmlFor="checkbox">View Pending Approvals</label>
                             <input onClick={(e) => { handleCheckbox(e.target.value) }} type="checkbox" id="checkbox" className="checkbox tex-lg" />
-                        </div>
+                        </div> */}
 
                         <table className="w-[95%] mx-auto bg-white rounded-lg shadow-lg mt-6">
                             <thead className="bg-gray-100">
